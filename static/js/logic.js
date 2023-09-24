@@ -1,5 +1,5 @@
 // Store our API endpoint as queryUrl.
-let queryUrl = "https://earthquake.usgs.gov/earthquakes/feed/v1.0/summary/4.5_month.geojson";
+var queryUrl = "https://earthquake.usgs.gov/earthquakes/feed/v1.0/summary/4.5_month.geojson";
 
 // Perform a GET request to the query URL/
 d3.json(queryUrl).then(function (data) {
@@ -17,7 +17,7 @@ function createFeatures(earthquakeData) {
 
   // Create a GeoJSON layer that contains the features array on the earthquakeData object.
   // Run the onEachFeature function once for each piece of data in the array.
-  let earthquakes = L.geoJSON(earthquakeData, {
+  var earthquakes = L.geoJSON(earthquakeData, {
     onEachFeature: onEachFeature
   });
 
@@ -45,24 +45,46 @@ function createMap(earthquakes) {
     });
 
   // Create a baseMaps object.
-  let baseMaps = {
+  var baseMaps = {
     "Street Map": street,
     "Topographic Map": topo
   };
 
   // Create an overlay object to hold our overlay.
-  let overlayMaps = {
+  var overlayMaps = {
     Earthquakes: earthquakes
   };
 
   // Create our map, giving it the streetmap and earthquakes layers to display on load.
-  let myMap = L.map("map", {
+  var myMap = L.map("map", {
     center: [
       31.7917, 7.0926
     ],
     zoom: 2,
     layers: [street, earthquakes]
   });
+
+  marker.bindPopup("insert message here");
+  Stylize markers based on earthquake severity
+
+
+  // Define a markerSize() function that will give each city a different radius based on its population.
+function markerSize(population) {
+    return Math.sqrt(population) * 50;
+  }
+  
+  // Loop through the cities array, and create one marker for each earthquake occurrence.
+  for (let i = 0; i < earthquakes.length; i++) {
+    L.circle(cities[i].location, {
+      fillOpacity: 0.75,
+      color: "white",
+      fillColor: "purple",
+      
+      // Setting our circle's radius to equal the output of our markerSize() function:
+      // This will make our marker's size proportionate to its population.
+      radius: markerSize(cities[i].population)
+    }).bindPopup(`<h1>${cities[i].name}</h1> <hr> <h3>Population: ${cities[i].population.toLocaleString()}</h3>`).addTo(myMap);
+  }
 
   // Create a layer control.
   // Pass it our baseMaps and overlayMaps.
@@ -75,7 +97,7 @@ function createMap(earthquakes) {
 
 
 // // Creating the map object
-// let myMap = L.map("map", {
+// var myMap = L.map("map", {
 //     center: [31.7917, 7.0926],
 //     zoom: 2
 //   });
@@ -86,7 +108,7 @@ function createMap(earthquakes) {
 //   }).addTo(myMap);
   
 //   // Store the API query variables.
-//   let URL = "https://earthquake.usgs.gov/earthquakes/feed/v1.0/summary/4.5_month.geojson";
+//   var URL = "https://earthquake.usgs.gov/earthquakes/feed/v1.0/summary/4.5_month.geojson";
 
 //   // Get the data with d3.
 //   d3.json(url).then(function(response) {
