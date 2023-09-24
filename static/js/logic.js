@@ -10,16 +10,36 @@ d3.json(queryUrl).then(function (data) {
 console.log(data);
 
 
-function chooseColor(borough) {
-    if (borough == "Brooklyn") return "yellow";
-    else if (borough == "Bronx") return "red";
-    else if (borough == "Manhattan") return "orange";
-    else if (borough == "Queens") return "green";
-    else if (borough == "Staten Island") return "purple";
-    else return "black";
-  }
+// function chooseColor(magnitude) {
+//     if (magnitude == 4.5<=5.4) return "yellow";
+//     else if (magnitude == 5.5<=6.4) return "orange";
+//     else if (magnitude == 6.5<=7.4) return "red";
+//     else return "black";
+//   }
 
+ // Create a new marker cluster group.
+//     let markers = L.markerClusterGroup();
   
+//     // Loop through the data.
+//     for (let i = 0; i < response.length; i++) {
+  
+//       // Set the data location property to a variable.
+//       let location = response[i].location;
+  
+//       // Check for the location property.
+//       if (location) {
+  
+//         // Add a new marker to the cluster group, and bind a popup.
+//         markers.addLayer(L.marker([location.coordinates[1], location.coordinates[0]])
+//           .bindPopup(response[i].descriptor));
+//       }
+  
+//     }
+  
+//     // Add our marker cluster layer to the map.
+//     myMap.addLayer(markers);
+  
+//   });
 function createFeatures(earthquakeData) {
 
   // Define a function that we want to run once for each feature in the features array.
@@ -115,7 +135,7 @@ L.marker([32.7767, -96.7979], {
     );
 
 
-
+//////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 // // Creating the map object
 // var myMap = L.map("map", {
 //     center: [31.7917, 7.0926],
