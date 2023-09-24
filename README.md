@@ -53,4 +53,5 @@ Add layer controls to your map.
 
 Resources:
 - https://earthquake.usgs.gov/earthquakes/feed/v1.0/geojson.php
+- https://leaflet-extras.github.io/leaflet-providers/preview/
 - 
