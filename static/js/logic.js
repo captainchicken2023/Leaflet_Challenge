@@ -1,5 +1,5 @@
 // Store our API endpoint as queryUrl.
-var queryUrl = "https://earthquake.usgs.gov/earthquakes/feed/v1.0/summary/4.5_month.geojson";
+const queryUrl = "https://earthquake.usgs.gov/earthquakes/feed/v1.0/summary/4.5_month.geojson";
 
 // Perform a GET request to the query URL/
 d3.json(queryUrl).then(function (data) {
@@ -7,6 +7,19 @@ d3.json(queryUrl).then(function (data) {
   createFeatures(data.features);
 });
 
+console.log(data);
+
+
+function chooseColor(borough) {
+    if (borough == "Brooklyn") return "yellow";
+    else if (borough == "Bronx") return "red";
+    else if (borough == "Manhattan") return "orange";
+    else if (borough == "Queens") return "green";
+    else if (borough == "Staten Island") return "purple";
+    else return "black";
+  }
+
+  
 function createFeatures(earthquakeData) {
 
   // Define a function that we want to run once for each feature in the features array.
@@ -28,15 +41,9 @@ function createFeatures(earthquakeData) {
 function createMap(earthquakes) {
 
   // Create the base layers.
-//   let street = L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
-//     attribution: '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'
-//   })
-
-//   let topo = L.tileLayer('https://{s}.tile.opentopomap.org/{z}/{x}/{y}.png', {
-//     attribution: 'Map data: &copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors, <a href="http://viewfinderpanoramas.org">SRTM</a> | Map style: &copy; <a href="https://opentopomap.org">OpenTopoMap</a> (<a href="https://creativecommons.org/licenses/by-sa/3.0/">CC-BY-SA</a>)'
-//   });
-
-
+    let street = L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
+        attribution: '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'
+  })
     var Stadia_StamenToner = L.tileLayer('https://tiles.stadiamaps.com/tiles/stamen_toner/{z}/{x}/{y}{r}.{ext}', {
         minZoom: 0,
         maxZoom: 20,
@@ -47,7 +54,7 @@ function createMap(earthquakes) {
   // Create a baseMaps object.
   var baseMaps = {
     "Street Map": street,
-    "Topographic Map": topo
+    "Topographic Map": Stadia_StamenToner
   };
 
   // Create an overlay object to hold our overlay.
@@ -72,6 +79,11 @@ function createMap(earthquakes) {
 function markerSize(population) {
     return Math.sqrt(population) * 50;
   }
+
+
+L.marker([32.7767, -96.7979], {
+    icon: customIcon
+}).addTo(myMap);
   
   // Loop through the cities array, and create one marker for each earthquake occurrence.
   for (let i = 0; i < earthquakes.length; i++) {
@@ -79,7 +91,7 @@ function markerSize(population) {
       fillOpacity: 0.75,
       color: "white",
       fillColor: "purple",
-      
+
       // Setting our circle's radius to equal the output of our markerSize() function:
       // This will make our marker's size proportionate to its population.
       radius: markerSize(cities[i].population)
@@ -94,6 +106,14 @@ function markerSize(population) {
   }).addTo(myMap);
 
 }
+
+// Create legend and define properties
+    var legend = L.control(
+        {
+            position: 'topleft'
+        }
+    );
+
 
 
 // // Creating the map object
