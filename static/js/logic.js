@@ -35,7 +35,7 @@ function createFeatures(earthquakeData) {
   //     else return "black";
   //   }
 
-function createMap(earthquakes) {
+  function createMap(earthquakes) {
 
   // Create the base layers.
     var street = L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
@@ -118,8 +118,8 @@ L.marker([32.7767, -96.7979], {
     function onEachFeature(feature, layer) {
         layer.bindPopup(`<h3>${feature.properties.place}</h3><hr><p>${new Date(feature.properties.time)}</p>`);
       }
-      marker.bindPopup("insert message here");
-      Stylize markers based on earthquake severity
+      // marker.bindPopup("insert message here");
+      // Stylize markers based on earthquake severity
       
       // Create a GeoJSON layer that contains the features array on the earthquakeData object.
       // Run the onEachFeature function once for each piece of data in the array.
