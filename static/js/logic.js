@@ -10,23 +10,9 @@ d3.json(queryUrl).then(function (data) {
 
 function createFeatures(earthquakeData) {
 
-  // function chooseColor(mag) {
-  //   if (mag <=4.5) {
-  //       return "Green";
-  //   } else if (mag <= 5) {
-  //       return "Yellow";
-  //   } else if (mag <= 5.5) {
-  //       return "Orange";
-  //   } else if (mag <= 6) {
-  //       return "Red";
-  //   } else if (mag <= 6.5) {
-  //       return "Purple";
-  //   } else if (mag <= 7) {
-  //       return "Blue";
-  //   } else {
-  //       return "Black";
-  //   };
-  // }
+  function markerSize(mag) {
+    return mag * 25000;
+  }
 
   function chooseColor(depth) {
     if (depth > 90)
@@ -49,7 +35,7 @@ function createFeatures(earthquakeData) {
     var street = L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
         attribution: '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'
   })
-  var topo = L.tileLayer('https://{s}.tile.opentopomap.org/{z}/{x}/{y}.png', {
+    var topo = L.tileLayer('https://{s}.tile.opentopomap.org/{z}/{x}/{y}.png', {
     attribution: 'Map data: &copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors, <a href="http://viewfinderpanoramas.org">SRTM</a> | Map style: &copy; <a href="https://opentopomap.org">OpenTopoMap</a> (<a href="https://creativecommons.org/licenses/by-sa/3.0/">CC-BY-SA</a>)'
   });
 
@@ -87,47 +73,33 @@ function createFeatures(earthquakeData) {
     L.control.layers(baseMaps, overlayMaps, {
         collapsed: false
     }).addTo(myMap);
-
-
-  // Define a markerSize() function that will give each city a different radius based on its population.
-  function markerSize(population) {
-    return Math.sqrt(population) * 50;
-  }
-
-
-
-    L.marker([32.7767, -96.7979], {
-        icon: customIcon
-    }).addTo(myMap);
   
   // Loop through the cities array, and create one marker for each earthquake occurrence.
   for (var i = 0; i < earthquakes.length; i++) {
     L.circle(cities[i].location, {
       fillOpacity: 0.75,
-      // color: "white",
-      // fillColor: "purple",
+      color: "white",
+      fillColor: "purple",
+    })};
 
       // Setting our circle's radius to equal the output of our markerSize() function:
       // This will make our marker's size proportionate to its population.
-      radius: markerSize(feature.properties.mag)
-    }).bindPopup("<h3>" + feature.properties.place + "</h3><hr><p>" + new Date(feature.properties.time) + "</p>" + "<p> Magnitude: " +  feature.properties.mag + "</p>")},     pointToLayer: function (feature, latlng) {
-      return new L.circle(lat_long,
-      {radius: markerSize(feature.properties.mag),
-      fillColor: markerColor(feature.properties.mag),
-      fillOpacity: 1,
-      stroke: false,
-  })
-}
-});
+      radius: markerSize(feature.properties.mag)}
+      bindPopup("<h3>${feature.properties.place}</h3><hr><h3>Depth:${feature.geometry.coordinates[2]}</h3><hr><p>Magnitude:${(feature.properties.mag)}</p>");
+      };
+      // pointToLayer: function (feature, lat_long) {
+      // return new L.circle(lat_long,)
+      // {radius: markerSize(feature.properties.mag),
+      // fillColor: markerColor(feature.properties.mag),
+      // fillOpacity: 1,
+      // stroke: false
+//   }
+// };
 
 
 
 // Create legend and define properties
-    var legend = L.control(
-        {
-            position: 'bottomright'
-        }
-    );
+      var legend = L.control({position: 'bottomright'});
 
     // Define a function that we want to run once for each feature in the features array.
     // Give each feature a popup that describes the place and time of the earthquake.
@@ -137,11 +109,11 @@ function createFeatures(earthquakeData) {
       
       // Create a GeoJSON layer that contains the features array on the earthquakeData object.
       // Run the onEachFeature function once for each piece of data in the array.
-      var earthquakes = L.geoJSON(earthquakeData, {
-        pointToLayer: function(feature, lat_long) {
+      var earthquakes = L.geoJSON(earthquakeData), {
+        pointToLayer: function (feature, lat_long) {
           return new L.circle(lat_long, {
               radius: (feature.properties.mag)*25000,
-              fillColor: chooseColor(feature.geometry.coordinates[2]),
+              fillColor: chooseColor(feature.properties.place[2]),
               color: "White",
               opacity: .5,
               fillOpacity: .75,
@@ -154,6 +126,5 @@ function createFeatures(earthquakeData) {
     
       // Send our earthquakes layer to the createMap function/
       createMap(earthquakes);
-    }
     
   
