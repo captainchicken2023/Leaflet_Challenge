@@ -54,6 +54,6 @@ Add layer controls to your map.
 Resources:
 - https://earthquake.usgs.gov/earthquakes/feed/v1.0/geojson.php
 - https://leaflet-extras.github.io/leaflet-providers/preview/
-- https://canvasjs.com/docs/charts/basics-of-creating-html5-chart/html5-color-coding/
+- https://htmlcolorcodes.com/color-names/
 - Employer-provided Skillsoft training resources
 - AskBCS
