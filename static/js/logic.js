@@ -57,9 +57,9 @@ function createFeatures(earthquakeData) {
   // Create our map, giving it the streetmap and earthquakes layers to display on load.
     var myMap = L.map("map", {
         center: [
-        40.9006, 174.8860
+        31.7917, 7.0926
         ],
-        zoom: 3,
+        zoom: 2,
         layers: [street, earthquakes]
     });
 
@@ -70,31 +70,24 @@ function createFeatures(earthquakeData) {
         collapsed: false
     }).addTo(myMap);
 
-
-
   // Define a markerSize() function that will give each city a different radius based on its population.
-// function markerSize(population) {
-//     return Math.sqrt(population) * 50;
-//   }
+function markerSize(mag) {
+    return Math.sqrt(mag) * 50;
+  }
 
-
-// L.marker([32.7767, -96.7979], {
-//     icon: customIcon
-// }).addTo(myMap);
-  
   // Loop through the cities array, and create one marker for each earthquake occurrence.
   for (var i = 0; i < earthquakes.length; i++) {
-    L.circle(cities[i].location, {
-      // fillOpacity: 0.75,
-      // color: "white",
-      // fillColor: "purple",
+    L.circleMarker(cities[i].location, {
+      fillOpacity: 0.75,
+      color: "white",
+      fillColor: "purple",
 
       // Setting our circle's radius to equal the output of our markerSize() function:
       // This will make our marker's size proportionate to its population.
-      radius: markerSize(cities[i].mag)
-    }).bindPopup(`<h1>${cities[i].mag}</h1> <hr> <h3>Population: ${cities[i].population.toLocaleString()}</h3>`).addTo(myMap);
-  }
-}
+      radius: markerSize(cities[i].population)
+  //   }).bindPopup(`<h1>${cities[i].name}</h1> <hr> <h3>Population: ${cities[i].population.toLocaleString()}</h3>`).addTo(myMap);
+  // }
+// }
 
 // Create legend and define properties
     var legend = L.control(
@@ -105,33 +98,63 @@ function createFeatures(earthquakeData) {
 
     // Define a function that we want to run once for each feature in the features array.
     // Give each feature a popup that describes the place and time of the earthquake.
-    function onEachFeature(feature, layer) {
-        layer.bindPopup(`<h3>${feature.properties.place}</h3><hr><p>${new Date(feature.properties.time)}</p>`);
-      }
+    // function onEachFeature(feature, layer) {
+    //     layer.bindPopup(`<h3>${feature.properties.place}</h3><hr><p>${new Date(feature.properties.time)}</p>`);
+    //   }
       // marker.bindPopup("insert message here");
       // Stylize markers based on earthquake severity
       
       // Create a GeoJSON layer that contains the features array on the earthquakeData object.
       // Run the onEachFeature function once for each piece of data in the array.
-      var earthquakes = L.geoJSON(earthquakeData, {
-        onEachFeature: onEachFeature,
-          pointToLayer: function (feature, lat_long) {
-            return new L.circle(lat_long, {
-                radius: (feature.properties.mag)*25000,
-                fillColor: chooseColor(feature.properties.place[2]),
-                color: "White",
-                opacity: .5,
-                fillOpacity: .85,
-                stroke: false,
-                weight: .5
-            });
-        }
-      });
+      // var earthquakes = L.geoJSON(earthquakeData, {
+      //   onEachFeature: onEachFeature
+      // });
+
+      L.geoJSON(earthquakeData, {
+        pointToLayer: function (feature, lat_long) {
+          return new L.circleMarker(lat_long)}, 
+          style: {
+              radius: (feature.properties.mag)*25000,
+              fillColor: chooseColor(feature.properties.place[2]),
+              color: "White",
+              opacity: .5,
+              fillOpacity: .85,
+              stroke: true,
+              weight: .5
+          }, 
+          onEachFeature: function(feature, layer) {layer.bindPopup(
+            "Magnitude: " + feature.properties.mag + "<br>Location: " + feature.properties.place)}
+      }
+    }).addTo(myMap);
     
+
       // Send our earthquakes layer to the createMap function/
       createMap(earthquakes);
-    }
+    
     
   
 
   
+   // Create a new marker cluster group.
+  //     let markers = L.markerClusterGroup();
+    
+  //     // Loop through the data.
+  //     for (let i = 0; i < response.length; i++) {
+    
+  //       // Set the data location property to a variable.
+  //       let location = response[i].location;
+    
+  //       // Check for the location property.
+  //       if (location) {
+    
+  //         // Add a new marker to the cluster group, and bind a popup.
+  //         markers.addLayer(L.marker([location.coordinates[1], location.coordinates[0]])
+  //           .bindPopup(response[i].descriptor));
+  //       }
+    
+  //     }
+    
+  //     // Add our marker cluster layer to the map.
+  //     myMap.addLayer(markers);
+    
+  //   });
