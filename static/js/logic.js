@@ -69,25 +69,29 @@ function createFeatures(earthquakeData) {
     L.control.layers(baseMaps, overlayMaps, {
         collapsed: false
     }).addTo(myMap);
+  }
+};
 
   // Define a markerSize() function that will give each city a different radius based on its population.
 function markerSize(mag) {
     return Math.sqrt(mag) * 50;
-  }
+};
 
   // Loop through the cities array, and create one marker for each earthquake occurrence.
   for (var i = 0; i < earthquakes.length; i++) {
     L.circleMarker(cities[i].location, {
       fillOpacity: 0.75,
-      color: "white",
-      fillColor: "purple",
+      // color: "white",
+      // fillColor: "purple",
 
       // Setting our circle's radius to equal the output of our markerSize() function:
       // This will make our marker's size proportionate to its population.
       radius: markerSize(cities[i].population)
   //   }).bindPopup(`<h1>${cities[i].name}</h1> <hr> <h3>Population: ${cities[i].population.toLocaleString()}</h3>`).addTo(myMap);
-  // }
-// }
+  }
+)};
+
+
 
 // Create legend and define properties
     var legend = L.control(
@@ -111,6 +115,7 @@ function markerSize(mag) {
       // });
 
       L.geoJSON(earthquakeData, {
+        onEachFeature: onEachFeature,
         pointToLayer: function (feature, lat_long) {
           return new L.circleMarker(lat_long)}, 
           style: {
@@ -125,36 +130,8 @@ function markerSize(mag) {
           onEachFeature: function(feature, layer) {layer.bindPopup(
             "Magnitude: " + feature.properties.mag + "<br>Location: " + feature.properties.place)}
       }
-    }).addTo(myMap);
+    ).addTo(myMap);
     
 
       // Send our earthquakes layer to the createMap function/
       createMap(earthquakes);
-    
-    
-  
-
-  
-   // Create a new marker cluster group.
-  //     let markers = L.markerClusterGroup();
-    
-  //     // Loop through the data.
-  //     for (let i = 0; i < response.length; i++) {
-    
-  //       // Set the data location property to a variable.
-  //       let location = response[i].location;
-    
-  //       // Check for the location property.
-  //       if (location) {
-    
-  //         // Add a new marker to the cluster group, and bind a popup.
-  //         markers.addLayer(L.marker([location.coordinates[1], location.coordinates[0]])
-  //           .bindPopup(response[i].descriptor));
-  //       }
-    
-  //     }
-    
-  //     // Add our marker cluster layer to the map.
-  //     myMap.addLayer(markers);
-    
-  //   });
