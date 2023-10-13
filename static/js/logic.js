@@ -1,4 +1,4 @@
-// Store our API endpoint as queryUrl.
+// Store our API endpoint as queryUrl. Focus is on magnitude 4.5 and larger earthquakes from the last 30 days.
 const queryUrl = "https://earthquake.usgs.gov/earthquakes/feed/v1.0/summary/4.5_month.geojson";
 
 // Perform a GET request to the query URL/
@@ -82,13 +82,6 @@ function createFeatures(earthquakeData) {
   }
 }
 
-// Create legend and define properties
-    var legend = L.control(
-        {
-            position: 'bottomright'
-        }
-    );
-
  // Define a markerSize() function that will give each city a different radius based on its population.
   function markerSize(population) {
     scaledMag = population**2;
@@ -102,9 +95,7 @@ function createFeatures(earthquakeData) {
         layer.bindPopup(`<h3>${feature.properties.place}</h3><hr><h3>Depth:${feature.geometry.coordinates[2]}</h3><hr><h3>Magnitude:${(feature.properties.mag)}</h3><p>${new Date(feature.properties.time)}</p>`);
       }
 
-      // marker.bindPopup("insert message here");
       // Stylize markers based on earthquake severity
-      
       // Create a GeoJSON layer that contains the features array on the earthquakeData object.
       // Run the onEachFeature function once for each piece of data in the array.
       var earthquakes = L.geoJSON(earthquakeData, {
@@ -121,11 +112,33 @@ function createFeatures(earthquakeData) {
             });
         }
       });
-    
+
+      // Create legend and define properties
+var legend = L.control({position: 'bottomright'});
+
+legend.onAdd = function (earthquakes) {
+
+    var div = L.DomUtil.create('div', 'legend'),
+        grades = [0, 10, 20, 50, 100, 200, 500, 1000],
+        labels = [];
+
+    // loop through our density intervals and generate a label with a colored square for each interval
+    for (var i = 0; i < grades.length; i++) {
+          div.innerHTML += "<h2>DEPTH<br>Kilometers</h2>";
+          div.innerHTML += '<i style="background: #f54522"></i><span>GREATER THAN 90</span><br>';
+          div.innerHTML += '<i style="background: #f2b95e"></i><span>71 - 90</span><br>';
+          div.innerHTML += '<i style="background: #ebf25e"></i><span>51 - 70</span><br>';
+          div.innerHTML += '<i style="background: #c3f25e"></i><span>31 - 50</span><br>';
+          div.innerHTML += '<i style="background: #368f6e"></i><span>11 - 30</span><br>';
+          div.innerHTML += '<i style="background: #42f5b3"></i><span>10 OR LESS</span><br>';
+    }
+
+    return div;
+};
+legend.addTo(map);
+
       // Send our earthquakes layer to the createMap function/
       createMap(earthquakes);
     }
-    
-  
 
   
