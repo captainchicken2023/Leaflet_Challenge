@@ -13,7 +13,7 @@ function createFeatures(earthquakeData) {
   function chooseColor(depth) {
     console.log(depth)
     if (depth > 90)
-    return "FireBrick";
+    return "Black";
     else if (depth >70)
     return "Red";
     else if (depth > 50)
@@ -114,28 +114,27 @@ function createFeatures(earthquakeData) {
       });
 
       // Create legend and define properties
-var legend = L.control({position: 'bottomright'});
+      var legend = L.control({position: 'bottomright'});
+      legend.onAdd = function (earthquakes) {
 
-legend.onAdd = function (earthquakes) {
+          var div = L.DomUtil.create('div', 'legend'),
+              grades = [0, 10, 20, 50, 100, 200, 500, 90],
+              labels = [];
 
-    var div = L.DomUtil.create('div', 'legend'),
-        grades = [0, 10, 20, 50, 100, 200, 500, 1000],
-        labels = [];
+          // loop through our density intervals and generate a label with a colored square for each interval
+          for (var i = 0; i < grades.length; i++) {
+                div.innerHTML += "<h2>DEPTH<br>Kilometers</h2>";
+                div.innerHTML += '<i style="background: "Black"></i><span>GREATER THAN 90</span><br>';
+                div.innerHTML += '<i style="background: "Red"></i><span>71 - 90</span><br>';
+                div.innerHTML += '<i style="background: "Orange"></i><span>51 - 70</span><br>';
+                div.innerHTML += '<i style="background: "Gold"></i><span>31 - 50</span><br>';
+                div.innerHTML += '<i style="background: "Chartreuse"></i><span>11 - 30</span><br>';
+                div.innerHTML += '<i style="background: "LimeGreen"></i><span>10 OR LESS</span><br>';
+          }
 
-    // loop through our density intervals and generate a label with a colored square for each interval
-    for (var i = 0; i < grades.length; i++) {
-          div.innerHTML += "<h2>DEPTH<br>Kilometers</h2>";
-          div.innerHTML += '<i style="background: #f54522"></i><span>GREATER THAN 90</span><br>';
-          div.innerHTML += '<i style="background: #f2b95e"></i><span>71 - 90</span><br>';
-          div.innerHTML += '<i style="background: #ebf25e"></i><span>51 - 70</span><br>';
-          div.innerHTML += '<i style="background: #c3f25e"></i><span>31 - 50</span><br>';
-          div.innerHTML += '<i style="background: #368f6e"></i><span>11 - 30</span><br>';
-          div.innerHTML += '<i style="background: #42f5b3"></i><span>10 OR LESS</span><br>';
-    }
-
-    return div;
-};
-legend.addTo(map);
+          return div;
+          };
+          legend.addTo(myMap);
 
       // Send our earthquakes layer to the createMap function/
       createMap(earthquakes);
