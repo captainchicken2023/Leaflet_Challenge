@@ -80,6 +80,27 @@ function createFeatures(earthquakeData) {
       radius: markerSize(cities[i].mag)
     }).bindPopup(`<h1>${cities[i].mag}</h1> <hr> <h3>Population: ${cities[i].population.toLocaleString()}</h3>`).addTo(myMap);
   }
+      // Create legend and define properties
+      var legend = L.control({position: 'bottomright'});
+      legend.onAdd = function (earthquakes) {
+  
+          var div = L.DomUtil.create('div', 'info legend'),
+              grades = [0, 10, 30, 50, 100, 50, 70, 90],
+              labels = [];
+  
+        // loop through our density intervals and generate a label with a colored square for each interval
+        // for (var i = 0; i < grades.length; i++) {
+          div.innerHTML += "<h2>DEPTH<br>Kilometers</h2>";
+          div.innerHTML += '<i style="background: ' + 'Black"' + '></i><span>GREATER THAN 90</span><br>';
+          div.innerHTML += '<i style="background: ' + 'Red"' + '></i><span>71 - 90</span><br>';
+          div.innerHTML += '<i style="background: ' + 'Orange"' + '></i><span>51 - 70</span><br>';
+          div.innerHTML += '<i style="background: ' + 'Gold"' + '></i><span>31 - 50</span><br>';
+          div.innerHTML += '<i style="background: ' + 'Chartreuse"' + '></i><span>11 - 30</span><br>';
+          div.innerHTML += '<i style="background: ' + 'LimeGreen"' + '></i><span>10 OR LESS</span><br>';
+    // }
+          return div;
+          };
+          legend.addTo(myMap);
 }
 
  // Define a markerSize() function that will give each city a different radius based on its population.
@@ -112,30 +133,10 @@ function createFeatures(earthquakeData) {
             });
         }
       });
-
+    
      // Send our earthquakes layer to the createMap function/
       createMap(earthquakes);
     }
 
-  // Create legend and define properties
-  var legend = L.control({position: 'bottomright'});
-  legend.onAdd = function (earthquakes) {
 
-      var div = L.DomUtil.create('div', 'info legend'),
-          grades = [0, 10, 30, 50, 100, 50, 70, 90],
-          labels = [];
-
-      // loop through our density intervals and generate a label with a colored square for each interval
-      for (var i = 0; i < grades.length; i++) {
-            div.innerHTML += "<h2>DEPTH<br>Kilometers</h2>";
-            div.innerHTML += '<i style="background: "Black"></i><span>GREATER THAN 90</span><br>';
-            div.innerHTML += '<i style="background: "Red"></i><span>71 - 90</span><br>';
-            div.innerHTML += '<i style="background: "Orange"></i><span>51 - 70</span><br>';
-            div.innerHTML += '<i style="background: "Gold"></i><span>31 - 50</span><br>';
-            div.innerHTML += '<i style="background: "Chartreuse"></i><span>11 - 30</span><br>';
-            div.innerHTML += '<i style="background: "LimeGreen"></i><span>10 OR LESS</span><br>';
-      }
-      return div;
-      };
-      legend.addTo(earthquakes);
   
